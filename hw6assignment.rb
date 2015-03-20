@@ -53,5 +53,3 @@ class MyTetris < Tetris
     @root.bind('u', ->{ @board.rotate_180 })
   end
 end
-
-
