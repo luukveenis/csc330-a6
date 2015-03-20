@@ -36,6 +36,21 @@ class MyBoard < Board
     @current_block = MyPiece.next_piece(self)
     @current_pos = nil
   end
+
+  # Overrides superclass method
+  # Uses locations.size instead of hardcoded range, since original
+  # assumed all pieces were made up of 4 blocks
+  def store_current
+    locations = @current_block.current_rotation
+    displacement = @current_block.position
+    (0..(locations.size - 1)).each do |index|
+      current = locations[index]
+      @grid[current[1]+displacement[1]][current[0]+displacement[0]] =
+        @current_pos[index]
+    end
+    remove_filled
+    @delay = [@delay - 2, 80].max
+  end
 end
 
 class MyTetris < Tetris

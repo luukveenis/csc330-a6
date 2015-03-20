@@ -209,11 +209,11 @@ class Board
   def store_current
     locations = @current_block.current_rotation
     displacement = @current_block.position
-    (0..3).each{|index| 
-      current = locations[index];
-      @grid[current[1]+displacement[1]][current[0]+displacement[0]] = 
-      @current_pos[index]
-    }
+    (0..3).each do |index|
+      current = locations[index]
+      @grid[current[1]+displacement[1]][current[0]+displacement[0]] =
+        @current_pos[index]
+    end
     remove_filled
     @delay = [@delay - 2, 80].max
   end
