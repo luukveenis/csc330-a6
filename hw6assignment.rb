@@ -8,7 +8,7 @@ class MyPiece < Piece
   All_My_Pieces = All_Pieces + [[[[0, 0], [-1, 0], [-2, 0], [1, 0], [2, 0]],
                                 [[0, 0], [0, -1], [0, -2], [0, 1], [0, 2]]],
                                 rotations([[0, 0], [0, 1], [1, 0]]),
-                                rotations([[0, 0], [1, 0], [2, 0], [0, 1], [1, 1]])]
+                                rotations([[0, 0], [0, 1], [0, 2], [1, 0], [1, 1]])]
 
   def self.next_piece(board)
     MyPiece.new(All_My_Pieces.sample, board)
