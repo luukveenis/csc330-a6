@@ -58,8 +58,9 @@ class MyBoard < Board
     @delay = [@delay - 2, 80].max
   end
 
+  # Pay 100 points to get a 1x1 block
   def cheat
-    if @score > 100
+    if @score > 100 && !@cheat
       @score = @score - 100
       @cheat = true
     end
