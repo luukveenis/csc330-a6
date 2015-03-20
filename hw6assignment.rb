@@ -23,6 +23,7 @@ class MyBoard < Board
     @score = 0
     @game = game
     @delay = 500
+    @cheat = false
   end
 
   def rotate_180
@@ -33,7 +34,12 @@ class MyBoard < Board
   end
 
   def next_piece
-    @current_block = MyPiece.next_piece(self)
+    if @cheat
+      @current_block = MyPiece.new([[0,0]], self)
+      @cheat = false
+    else
+      @current_block = MyPiece.next_piece(self)
+    end
     @current_pos = nil
   end
 
@@ -51,6 +57,13 @@ class MyBoard < Board
     remove_filled
     @delay = [@delay - 2, 80].max
   end
+
+  def cheat
+    if @score > 100
+      @score = @score - 100
+      @cheat = true
+    end
+  end
 end
 
 class MyTetris < Tetris
@@ -66,5 +79,6 @@ class MyTetris < Tetris
   def key_bindings
     super
     @root.bind('u', ->{ @board.rotate_180 })
+    @root.bind('c', ->{ @board.cheat })
   end
 end
