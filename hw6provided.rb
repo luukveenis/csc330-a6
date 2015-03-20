@@ -3,10 +3,10 @@
 require './hw6graphics'
 
 # class responsible for the pieces and their movements
-class Piece 
-  
-  # creates a new Piece from the given point array, holding the board for 
-  # determining if movement is possible for the piece, and gives the piece a 
+class Piece
+
+  # creates a new Piece from the given point array, holding the board for
+  # determining if movement is possible for the piece, and gives the piece a
   # color, rotation, and starting position.
   def initialize (point_array, board)
     @all_rotations = point_array
@@ -20,7 +20,7 @@ class Piece
   def current_rotation
     @all_rotations[@rotation_index]
   end
-  
+
   def moved
     @moved
   end
@@ -38,20 +38,20 @@ class Piece
   end
 
   # takes the intended movement in x, y and rotation and checks to see if the
-  # movement is possible.  If it is, makes this movement and returns true. 
+  # movement is possible.  If it is, makes this movement and returns true.
   # Otherwise returns false.
   def move (delta_x, delta_y, delta_rotation)
-    # Ensures that the rotation will always be a possible formation (as opposed 
-    # to nil) by altering the intended rotation so that it stays 
+    # Ensures that the rotation will always be a possible formation (as opposed
+    # to nil) by altering the intended rotation so that it stays
     # within the bounds of the rotation array
     moved = true
     potential = @all_rotations[(@rotation_index + delta_rotation) % @all_rotations.size]
     # for each individual block in the piece, checks if the intended move
     # will put this block in an occupied space
-    potential.each{|posns| 
+    potential.each{|posns|
       if !(@board.empty_at([posns[0] + delta_x + @base_position[0],
                             posns[1] + delta_y + @base_position[1]]));
-        moved = false;  
+        moved = false
       end
     }
     if moved
@@ -64,17 +64,17 @@ class Piece
 
   # class method to figures out the different rotations of the provided piece
   def self.rotations (point_array)
-    rotate1 = point_array.map {|x,y| [-y,x]}  
-    rotate2 = point_array.map {|x,y| [-x,-y]} 
-    rotate3 = point_array.map {|x,y| [y,-x]}  
-    [point_array, rotate1, rotate2, rotate3]  
+    rotate1 = point_array.map {|x,y| [-y,x]}
+    rotate2 = point_array.map {|x,y| [-x,-y]}
+    rotate3 = point_array.map {|x,y| [y,-x]}
+    [point_array, rotate1, rotate2, rotate3]
   end
 
   # class method to choose the next piece
   def self.next_piece (board)
     Piece.new(All_Pieces.sample, board)
   end
-  
+
   # class array holding all the pieces and their rotations
   All_Pieces = [[[[0, 0], [1, 0], [0, 1], [1, 1]]],  # square (only needs one)
                rotations([[0, 0], [-1, 0], [1, 0], [0, -1]]), # T
@@ -85,9 +85,9 @@ class Piece
                rotations([[0, 0], [-1, 0], [0, -1], [1, -1]]), # S
                rotations([[0, 0], [1, 0], [0, -1], [-1, -1]])] # Z
 
-  # class array 
-  All_Colors = ['DarkGreen', 'dark blue', 'dark red', 'gold2', 'Purple3', 
-               'OrangeRed2', 'LightSkyBlue']  
+  # class array
+  All_Colors = ['DarkGreen', 'dark blue', 'dark red', 'gold2', 'Purple3',
+               'OrangeRed2', 'LightSkyBlue']
 end
 
 
@@ -101,12 +101,12 @@ class Board
     @game = game
     @delay = 500
   end
-   
+
   # both the length and the width of a block, since it is a square
   def block_size
     15
   end
-  
+
   def num_columns
     10
   end
@@ -114,7 +114,7 @@ class Board
   def num_rows
     27
   end
-  
+
   # the current score
   def score
     @score
@@ -125,7 +125,7 @@ class Board
     @delay
   end
 
-  # the game is over when there is a piece extending into the second row 
+  # the game is over when there is a piece extending into the second row
   # from the top
   def game_over?
     @grid[1].any?
@@ -176,7 +176,7 @@ class Board
     end
     draw
   end
-  
+
   # drops the piece to the lowest location in the currently occupied columns.
   # Then replaces it with a new piece
   # Change the score to reflect the distance dropped.
@@ -218,7 +218,7 @@ class Board
     @delay = [@delay - 2, 80].max
   end
 
-  # Takes a point and checks to see if it is in the bounds of the board and 
+  # Takes a point and checks to see if it is in the bounds of the board and
   # currently empty.
   def empty_at (point)
     if !(point[0] >= 0 and point[0] < num_columns)
@@ -232,7 +232,7 @@ class Board
   end
 
   # removes all filled rows and replaces them with empty ones, dropping all rows
-  # above them down each time a row is removed and increasing the score.  
+  # above them down each time a row is removed and increasing the score.
   def remove_filled
     (2..(@grid.size-1)).each{|num| row = @grid.slice(num);
       # see if this row is full (has no nil)
@@ -255,8 +255,8 @@ class Board
     self
   end
 
-  # current_pos holds the intermediate blocks of a piece before they are placed 
-  # in the grid.  If there were any before, they are sent to the piece drawing 
+  # current_pos holds the intermediate blocks of a piece before they are placed
+  # in the grid.  If there were any before, they are sent to the piece drawing
   # method to be removed and replaced with that of the new position
   def draw
     @current_pos = @game.draw_piece(@current_block, @current_pos)
@@ -285,26 +285,26 @@ class Tetris
     @board.draw
   end
 
-  def key_bindings  
-    @root.bind('n', lambda {self.new_game}) 
+  def key_bindings
+    @root.bind('n', lambda {self.new_game})
 
-    @root.bind('p', lambda {self.pause}) 
+    @root.bind('p', lambda {self.pause})
 
     @root.bind('q', lambda {exitProgram})
-    
+
     @root.bind('a', lambda {@board.move_left})
-    @root.bind('Left', lambda {@board.move_left}) 
-    
+    @root.bind('Left', lambda {@board.move_left})
+
     @root.bind('d', lambda {@board.move_right})
-    @root.bind('Right', lambda {@board.move_right}) 
+    @root.bind('Right', lambda {@board.move_right})
 
     @root.bind('s', lambda {@board.rotate_clockwise})
     @root.bind('Down', lambda {@board.rotate_clockwise})
 
     @root.bind('w', lambda {@board.rotate_counter_clockwise})
-    @root.bind('Up', lambda {@board.rotate_counter_clockwise}) 
-    
-    @root.bind('space' , lambda {@board.drop_all_the_way}) 
+    @root.bind('Up', lambda {@board.rotate_counter_clockwise})
+
+    @root.bind('space' , lambda {@board.drop_all_the_way})
   end
 
   def buttons
@@ -313,28 +313,28 @@ class Tetris
 
     new_game = TetrisButton.new('new game', 'lightcoral'){self.new_game}
     new_game.place(35, 75, 15, 7)
-    
+
     quit = TetrisButton.new('quit', 'lightcoral'){exitProgram}
     quit.place(35, 50, 140, 7)
-    
+
     move_left = TetrisButton.new('left', 'lightgreen'){@board.move_left}
     move_left.place(35, 50, 27, 536)
-    
+
     move_right = TetrisButton.new('right', 'lightgreen'){@board.move_right}
     move_right.place(35, 50, 127, 536)
-    
+
     rotate_clock = TetrisButton.new('^_)', 'lightgreen'){@board.rotate_clockwise}
     rotate_clock.place(35, 50, 77, 501)
 
     rotate_counter = TetrisButton.new('(_^', 'lightgreen'){
       @board.rotate_counter_clockwise}
     rotate_counter.place(35, 50, 77, 571)
-    
+
     drop = TetrisButton.new('drop', 'lightgreen'){@board.drop_all_the_way}
     drop.place(35, 50, 77, 536)
 
     label = TetrisLabel.new(@root) do
-      text 'Current Score: '   
+      text 'Current Score: '
       background 'lightblue'
     end
     label.place(35, 100, 26, 45)
@@ -342,7 +342,7 @@ class Tetris
       background 'lightblue'
     end
     @score.text(@board.score)
-    @score.place(35, 50, 126, 45)    
+    @score.place(35, 50, 126, 45)
   end
 
   # starts the game over, replacing the old board and score
@@ -388,7 +388,7 @@ class Tetris
   end
 
   # takes a piece and optionally the list of old TetrisRects corresponding
-  # to it and returns a new set of TetrisRects which are how the piece is 
+  # to it and returns a new set of TetrisRects which are how the piece is
   # visible to the user.
   def draw_piece (piece, old=nil)
     if old != nil and piece.moved
@@ -397,11 +397,11 @@ class Tetris
     size = @board.block_size
     blocks = piece.current_rotation
     start = piece.position
-    blocks.map{|block| 
-    TetrisRect.new(@canvas, start[0]*size + block[0]*size + 3, 
+    blocks.map{|block|
+    TetrisRect.new(@canvas, start[0]*size + block[0]*size + 3,
                        start[1]*size + block[1]*size,
-                       start[0]*size + size + block[0]*size + 3, 
-                       start[1]*size + size + block[1]*size, 
+                       start[0]*size + size + block[0]*size + 3,
+                       start[1]*size + size + block[1]*size,
                        piece.color)}
   end
 end
